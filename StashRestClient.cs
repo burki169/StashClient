@@ -15,6 +15,11 @@ namespace StashClient
         private string ApiUrl { get; set; }
         private RestClient ApiClient { get; set; }
 
+        public StashRestClient(RestClient restClient)
+        {
+            ApiClient = restClient;
+        }
+
         public StashRestClient(string stashUrl)
         {
             stashUrl = stashUrl.EnsureEndsWithForwardSlash();
