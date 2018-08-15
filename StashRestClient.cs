@@ -31,7 +31,6 @@ namespace StashClient
         {
             stashUrl = stashUrl.EnsureEndsWithForwardSlash();
             ApiUrl = $"{stashUrl}rest/api/latest/";
-            ApiClient = new RestClient(ApiUrl);
 
             ApiClient = new RestClient(ApiUrl)
             {
