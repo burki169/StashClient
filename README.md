@@ -2,7 +2,7 @@
 A simple Atlassian Stash REST api client using RestSharp
 
 # Usage
-You can define your own RestClient to perforn the requests.
+You can define your own RestSharp.RestClient to perforn the requests.
 
 ```c#
 RestClient baseClient = ...
