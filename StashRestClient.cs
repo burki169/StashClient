@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Authenticators;
 using StashClient.Objects;
+using Newtonsoft.Json;
 
 namespace StashClient
 {
@@ -14,6 +15,11 @@ namespace StashClient
     {        
         private string ApiUrl { get; set; }
         private RestClient ApiClient { get; set; }
+
+        public StashRestClient(RestClient restClient)
+        {
+            ApiClient = restClient;
+        }
 
         public StashRestClient(string stashUrl)
         {
@@ -26,7 +32,6 @@ namespace StashClient
         {
             stashUrl = stashUrl.EnsureEndsWithForwardSlash();
             ApiUrl = $"{stashUrl}rest/api/latest/";
-            ApiClient = new RestClient(ApiUrl);
 
             ApiClient = new RestClient(ApiUrl)
             {
@@ -75,6 +80,72 @@ namespace StashClient
             yield break;
         }
 
+        public IEnumerable<Branch> GetAllBranches(Repository repo)
+        {
+            var request = new RestRequest("projects/{key}/repos/{slug}/branches", Method.GET);
+            request.AddUrlSegment("key", repo.Project.Key);
+            request.AddUrlSegment("slug", repo.Slug);
+            request.AddParameter("limit", "1000");
+            var response = ApiClient.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var branchList = StashBranchList.FromJson(response.Content);
+                if (branchList.Size > 0)
+                {
+                    foreach (var branch in branchList.Branches)
+                    {
+                        yield return branch;
+                    }
+                }
+            }
+
+            yield break;
+        }
+
+        //Size in bytes
+        public double GetSize(Repository repo)
+        {
+            var result = 0D;
+            //do not use the rest api becuase the method is not there -> therefore change the baseurl temporarly
+            var temp = ApiClient.BaseUrl;
+            var server = temp.GetComponents(UriComponents.SchemeAndServer, UriFormat.SafeUnescaped);
+            ApiClient.BaseUrl = new Uri(server);
+
+            var request = new RestRequest("/stash/projects/{key}/repos/{slug}/sizes/", Method.GET);
+            request.AddUrlSegment("key", repo.Project.Key);
+            request.AddUrlSegment("slug", repo.Slug);
+            var response = ApiClient.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var dict = JsonConvert.DeserializeObject<Dictionary<string, double>>(response.Content);
+                result = dict["repository"];
+            }
+            ApiClient.BaseUrl = temp;
+
+            return result;
+        }
+
+        public IEnumerable<Tag> GetAllTags(Repository repo)
+        {
+            var request = new RestRequest("projects/{key}/repos/{slug}/tags", Method.GET);
+            request.AddUrlSegment("key", repo.Project.Key);
+            request.AddUrlSegment("slug", repo.Slug);
+            request.AddParameter("limit", "1000");
+            var response = ApiClient.Execute(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var tagList = StashTagList.FromJson(response.Content);
+                if (tagList.Size > 0)
+                {
+                    foreach (var tag in tagList.Tags)
+                    {
+                        yield return tag;
+                    }
+                }
+            }
+
+            yield break;
+        }
 
         public IEnumerable<string> GetFileNames(Repository repo, int limit)
         {

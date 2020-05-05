@@ -30,14 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=106.3.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>packages\RestSharp.106.3.1\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Objects\Branch.cs" />
     <Compile Include="Objects\Clone.cs" />
     <Compile Include="Objects\Converter.cs" />
     <Compile Include="Objects\Line.cs" />
@@ -57,10 +59,13 @@
     <Compile Include="Objects\Repository.cs" />
     <Compile Include="Objects\Self.cs" />
     <Compile Include="Objects\Serialize.cs" />
+    <Compile Include="Objects\StashBranchList.cs" />
     <Compile Include="Objects\StashProjectList.cs" />
     <Compile Include="Objects\StashRepositoryFile.cs" />
     <Compile Include="Objects\StashRepositoryFileList.cs" />
     <Compile Include="Objects\StashRepositoryList.cs" />
+    <Compile Include="Objects\StashTagList.cs" />
+    <Compile Include="Objects\Tag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StashRestClient.cs" />
   </ItemGroup>
